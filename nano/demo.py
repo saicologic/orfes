@@ -2,122 +2,12 @@ import rtmidi_python as rtmidi
 import OSC
 import requests
 import json
+from orphe import Orphe
 
-class Orphe:
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
-        self.client = OSC.OSCClient()
-
-    def device_index(self, device):
-        if device == 'left':
-            return 0
-        elif device == 'right':
-            return 1
-
-    def flash_color(self, device, r, g, b):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/flashColor")
-        msg.append(self.device_index(device))
-        msg.append(r)
-        msg.append(g)
-        msg.append(b)
-        self.send(msg)
-
-    def flash_modulation(self, device, decay, fade, duration):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/flashModulation")
-        msg.append(self.device_index(device))
-        msg.append(decay)
-        msg.append(fade)
-        msg.append(duration)
-        self.send(msg)
-
-    def roll_color(self, device, r, g, b):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/rollColor")
-        msg.append(self.device_index(device))
-        msg.append(r)
-        msg.append(g)
-        msg.append(b)
-        self.send(msg)
-
-    def roll_modulation(self, device, decay, fade, duration):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/rollModulation")
-        msg.append(self.device_index(device))
-        msg.append(decay)
-        msg.append(fade)
-        msg.append(duration)
-        self.send(msg)
-
-    def move_flash_color(self, device, r, g, b):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/moveFlashColor")
-        msg.append(self.device_index(device))
-        msg.append(r)
-        msg.append(g)
-        msg.append(b)
-        self.send(msg)
-
-    def move_flash_modulation(self, device, decay, fade, duration):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/moveFlashModulation")
-        msg.append(self.device_index(device))
-        msg.append(decay)
-        msg.append(fade)
-        msg.append(duration)
-        self.send(msg)
-
-    def flicker_duration(self, device, duration):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/flickerDuration")
-        msg.append(self.device_index(device))
-        msg.append(duration)
-        self.send(msg)
-
-    def flicker_color1(self, device, r, g, b):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/flickerColor1")
-        msg.append(self.device_index(device))
-        msg.append(r)
-        msg.append(g)
-        msg.append(b)
-        self.send(msg)
-
-    def flicker_color2(self, device, r, g, b):
-        # print r, g, b
-        msg = OSC.OSCMessage()
-        msg.setAddress("/flickerColor2")
-        msg.append(self.device_index(device))
-        msg.append(r)
-        msg.append(g)
-        msg.append(b)
-        self.send(msg)
-
-    def send(self, message):
-        print message
-        client = OSC.OSCClient()
-        self.client.sendto(message, (self.host, self.port))
-
-def push_to_web(action, device, rgb):
-    data = {
-        'action': action,
-        'device': device,
-        'rgb': rgb
-    }
-
-    params = json.dumps(data)
-    print params
-    # r = requests.get('http://c0161b1c.ngrok.io/Streamings/message', params=params)
+def push_to_web(color):
+    message = 'device=kick&action=left&color=' + color
+    print message
+    # r = requests.post('http://172.16.201.161:9292/streamings/message?' + message, params=message, headers= { 'Content-Type': 'text/event-stream'})
     # print r
 
 # Connect to MIDI
@@ -156,6 +46,7 @@ def init_255():
         orphe.flicker_color1(device, 255, 255, 255)
         orphe.flicker_color2(device, 255, 255, 255)
 
+
 # Initialize
 init_0()
 
@@ -169,15 +60,24 @@ while True:
         # up 3 botton
         if _type == 18:
             if _id == 144:
-                flash_color(255, 0, 0)
+                orphe.flicker_color1('left', 255, 0, 0)
+                orphe.flicker_color1('right', 255, 0, 0)
+                # pass
+                # flash_color(255, 0, 0)
 
         if _type == 20:
             if _id == 144:
-                flash_color(0, 255, 0)
+                orphe.flicker_color1('left', 0, 255, 0)
+                orphe.flicker_color1('right', 0, 255, 0)
+                pass
+                # flash_color(0, 255, 0)
 
         if _type == 22:
             if _id == 144:
-                flash_color(0, 0, 255)
+                orphe.flicker_color1('left', 0, 0, 255)
+                orphe.flicker_color1('right', 0, 0, 255)
+                pass
+                # flash_color(0, 0, 255)
 
         # up 3 button
         if _type == 30:
@@ -192,37 +92,45 @@ while True:
             if _id == 144:
                 roll_color(0, 0, 255)
 
-        # down left
+        # down LED
         if _type == 12:
             if _id == 144:
                 print 'red'
-                # push_to_web('kick', 'left', [0, 0, 0])
                 orphe.flash_color('left', 255, 0, 0)
-                # orphe.flash_modulation('left', 255, 255, 255)
-                # orphe.flash_color('right', 255, 0, 0)
-                # roll_color(255, 0, 0)
-
+                # orphe.flicker_color1('left', 255, 0, 0)
+                orphe.flash_color('right', 255, 0, 0)
+                # orphe.flicker_color1('right', 255, 0, 0)
+                push_to_web('red')
 
         if _type == 14:
             if _id == 144:
                 print 'green'
-                # push_to_web('kick', 'left', [0, 255, 0])
-                # orphe.flash_color(0, 255, 0)
-                # roll_color(0, 255, 0)
                 orphe.flash_color('left', 0, 255, 0)
-                # orphe.flash_modulation('left', 0, 255, 0)
-                # orphe.flash_color('right', 0, 255, 0)
+                # orphe.flicker_color1('left', 0, 255, 0)
+                orphe.flash_color('right', 0, 255, 0)
+                # orphe.flicker_color1('right', 0, 255, 0)
+                push_to_web('green')
 
 
         if _type == 16:
             if _id == 144:
                 print 'blue'
-                # push_to_web('kick', 'left', [0, 0, 255])
-                # flash_color(0, 0, 255)
-                # roll_color(0, 0, 255)
                 orphe.flash_color('left', 0, 0, 255)
-                # orphe.flash_modulation('left', 0, 0, 255)
-                # orphe.flash_color('right', 0, 0, 255)
+                # orphe.flicker_color1('left', 0, 0, 255)
+                orphe.flash_color('right', 0, 0, 255)
+                # orphe.flicker_color1('right', 0, 0, 255)
+                push_to_web('blue')
+
+        if _type == 17:
+            if _id == 144:
+                print 'yellow'
+                # orphe.flash_color('left', 0, 0, 255)
+                orphe.flash_color('left', 255, 255, 0)
+                # orphe.flicker_color1('left', 255, 255, 0)
+                orphe.flash_color('right', 255, 255, 0)
+                # orphe.flicker_color1('right', 255, 255, 0)
+                push_to_web('yellow')
+
         if _type == 13:
             if _id == 144:
                 init_0()
