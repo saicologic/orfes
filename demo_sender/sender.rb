@@ -4,7 +4,7 @@ require 'osc-ruby/em_server'
 require 'uri'
 require 'faraday'
 require 'pry'
-
+require 'net/http'
 
 server = OSC::EMServer.new(6666)
 client = OSC::Client.new('localhost', 7777)
@@ -81,28 +81,29 @@ count = 0
 # right_orphe.acc_z = 1.1
 # puts right_orphe.acc_z
 
-# def kick(color, motion)
-#   query = "action=left&motion=kick&color=#{color}&motion=#{motion}"
-#   uri = URI.parse("http://172.16.201.161:9292/streamings/message?#{query}")
-#   http = Net::HTTP.new(uri.host, uri.port)
-#   req = Net::HTTP::Post.new(uri.request_uri) #があるとして
-#   req["Content-Type"] = "text/event-stream"
-#   res = http.request(req)
-#   puts res
-# end
-
-def kick(color, motion)
+def send_motion(motion, color)
   query = "action=left&motion=kick&color=#{color}&motion=#{motion}"
-  url = "http://172.16.201.161:9292/streamings/message?#{query}"
-  conn = Faraday::Connection.new(:url => url) do |c|
-    c.adapter :em_synchrony
-  end
-  resp = conn.post do |req|
-    req.url url
-      req.headers['Content-Type'] = "text/event-stream"
-  end
-  resp
+  uri = URI.parse("http://172.16.201.161:9292/streamings/message?#{query}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  req = Net::HTTP::Post.new(uri.request_uri) #があるとして
+  req["Content-Type"] = "text/event-stream"
+  res = http.request(req)
+  print res
+  res
 end
+
+# def send_motion(action, motion)
+#   query = "action=#{action}&motion=kick&motion=#{motion}"
+#   url = "http://172.16.201.161:9292/streamings/message?#{query}"
+#   conn = Faraday::Connection.new(:url => url) do |c|
+#     c.adapter :em_synchrony
+#   end
+#   resp = conn.post do |req|
+#     req.url url
+#       req.headers['Content-Type'] = "text/event-stream"
+#   end
+#   resp
+# end
 
 # binding.pry
 
@@ -127,30 +128,34 @@ server.add_method '/sensorValues' do |message|
 # puts "m[8] = #{m[8]}"
 
   #ジャンプは緑
-    if (right_orphe.acc_z - left_orphe.acc_z) < 0.5 && right_orphe.acc_z > 0.3 && left_orphe.acc_z > 0.3
-      jump += 1
-      puts "#{count} jump = #{jump}"
-      client.send(OSC::Message.new('/FlashColor', 0, 0, 204, 0))
-      client.send(OSC::Message.new('/FlashColor', 1, 0, 204, 0))
-      sleep 0.3
-      next
-    end
+  if (right_orphe.acc_z - left_orphe.acc_z) < 0.5 && right_orphe.acc_z > 0.3 && left_orphe.acc_z > 0.3
+    jump += 1
+    puts "#{count} jump = #{jump}"
+    client.send(OSC::Message.new('/FlashColor', 0, 0, 204, 0))
+    client.send(OSC::Message.new('/FlashColor', 1, 0, 204, 0))
+    send_motion('left', 'jump')
+    # send_motion('right', 'jump')
+    sleep 0.3
+    next
+  end
 
   #ステップは黄色いフラッシュ
   case m[0]
   when 0
-    if left_orphe.acc_z > 0.3 && left_orphe.get_gyro_length(m) <0.1
+    if left_orphe.acc_z > 0.3 && left_orphe.get_gyro_length(m) <0.05
       left_step += 1
       puts "#{count} left_step = #{left_step}"
       client.send(OSC::Message.new('/flashColor', 0, 170, 240, 0))
+      send_motion('left', 'step')
       sleep 0.1
       next
     end
   when 1
-    if right_orphe.acc_z > 0.3 && right_orphe.get_gyro_length(m) <0.1
+    if right_orphe.acc_z > 0.3 && right_orphe.get_gyro_length(m) <0.05
       right_step += 1
       puts "#{count} right_step = #{right_step}"
       client.send(OSC::Message.new('/flashColor', 1, 170, 240, 0))
+      send_motion('right', 'step')
       sleep 0.1
       next
     end
@@ -159,25 +164,27 @@ server.add_method '/sensorValues' do |message|
   #キックは赤いフラッシュ
   case m[0]
   when 0
-    if left_orphe.get_acc_length(m) > 0.3 && left_orphe.gyro_z > 0.1
+    if left_orphe.get_acc_length(m) > 0.3 && left_orphe.gyro_z > 0.05
       left_kick += 1
       puts "#{count} left_kick = #{left_kick}"
       client.send(OSC::Message.new('/flashColor', 0, 204, 0, 0))
+      send_motion('left', 'kick')
       sleep 0.1
       next
     end
   when 1
-    if right_orphe.get_acc_length(m) > 0.3 && right_orphe.gyro_z > 0.1
+    if right_orphe.get_acc_length(m) > 0.3 && right_orphe.gyro_z > 0.05
       right_kick += 1
       puts "#{count} right_kick = #{right_kick}"
       client.send(OSC::Message.new('/flashColor', 1, 204, 0, 0))
+      send_motion('right', 'kick')
       sleep 0.1
       next
     end
   end
 
   count +=1
-  puts count
+  # puts count
 end
 
 server.run
