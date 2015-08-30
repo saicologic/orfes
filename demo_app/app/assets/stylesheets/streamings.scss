@@ -1,0 +1,308 @@
+*{
+  margin:0;
+  padding:0;
+}
+#sb-site{
+    background-color:#222222;
+
+}
+#contents{
+  width:100%;
+  .now_shaking_box{
+    display: none;
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    z-index: 999;
+  }
+  .now_shaking{
+    margin: auto;
+    height: 30px;
+  }
+  #canvas{
+    position: absolute;
+    z-index: 1;
+  }
+  #img{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .green{
+    background-image: url(../assets/green.png);
+  }
+  .red{
+    background-image: url(../assets/red.png);
+  }
+  .blue{
+    background-image: url(../assets/blue.png);
+  }
+  .yellow{
+    background-image: url(../assets/yellow.png);
+  }
+}
+
+.control{
+  label{
+    color:#ffffff;
+  }
+  form{
+    padding:20px;
+  }  
+}
+.estimote{
+  .button{
+    width: 50%;
+    height:200px;
+    float: left;
+    text-align: center;
+    line-height: 200px;
+    font-size: 1.6em;
+    cursor: pointer;
+  }
+}
+
+#sb-site, .sb-site-container {
+  padding: 14px;
+}
+
+.sb-slidebar {
+  padding: 14px;
+  color: #fff;
+}
+
+html.sb-active #sb-site, .sb-toggle-left, .sb-toggle-right, .sb-open-left, .sb-open-right, .sb-close {
+  cursor: pointer;
+}
+
+/* Fixed position examples */
+#sb-site.top-padding {
+  padding-top: 50px;
+}
+
+#fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background-color: red;
+  z-index: 4;
+}
+
+#fixed-top span.sb-toggle-left {
+  float: left;
+  color: white;
+  padding: 10px;
+}
+
+#fixed-top span.sb-toggle-right {
+  float: right;
+  color: white;
+  padding: 10px;
+}
+#sb-site {
+  box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.3); /* Shadow cast onto the slidebars when opened. */
+  padding: 50px 0 30px 0;
+}
+
+#adverts {
+  margin-top: 20px;
+}
+
+.advert {
+  border-radius: 3px;
+  border: 1px solid #727272;
+  margin-bottom: 10px;
+  padding: 3px;
+}
+
+.navbar {
+  box-shadow: /* Shadow beneath the bar and edge highlights. */
+    /* Layered single pixel shadows to create a one sided shadow effect. */
+    0 5px 0 0 rgba(0, 0, 0, 0.01),
+    0 4px 0 0 rgba(0, 0, 0, 0.02),
+    0 3px 0 0 rgba(0, 0, 0, 0.04),
+    0 2px 0 0 rgba(0, 0, 0, 0.06),
+    0 1px 0 0 rgba(0, 0, 0, 0.08),
+    /* Top highlight */
+    0 1px 0 0 rgba(255, 255, 255, 0.1) inset,
+    /* Left highlight */
+    1px 0 0 0 rgba(255, 255, 255, 0.1) inset,
+    /* Right highlight */
+    -1px 0 0 0 rgba(255, 255, 255, 0.1) inset,
+    /* Bottom lowlight */
+    0 -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    
+  /* Glass gradient overlay. */
+  background-image: -webkit-linear-gradient(top, rgba(255,255,255, 0.05) 50%, rgba(0,0,0, 0.02) 51%); /*  Webkit syntax. */
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.02) 51%); /* Final syntax. */
+  background-size: 100%;
+  background-repeat: no-repeat;
+  
+  /* Bootstrap Changes */
+  border: none;
+  width: 100%;
+  left: auto;
+  right: auto;
+}
+
+#logo {
+  margin-top: 4px;
+  text-align: center;
+}
+
+#top-arrow {
+  padding-top: 17px;
+  padding-bottom: 13px;
+}
+
+.navbar .sb-toggle-left {
+  width: 58px;
+  float: left;
+  padding: 14px;
+}
+
+.navbar .sb-toggle-right {
+  width: 58px;
+  float: right;
+  padding: 14px;
+}
+
+.sb-toggle-left, .sb-toggle-right, .sb-open-left, .sb-open-right, .sb-close {
+  cursor: pointer;
+}
+
+.sb-right {
+  margin-top: 50px;
+}
+
+.navicon-line {
+  width: 24px;
+  height: 4px;
+  border-radius: 1px;
+  margin-bottom: 3px;
+  background-color: #fff;
+  box-shadow:0 1px 1px 2px rgba(0,0,0,0.4) inset;
+}
+
+ul.navbar-nav {
+  display: none;
+}
+
+footer {
+  margin-top: 30px;
+}
+
+/* Slidebars */
+
+.sb-slidebar {
+  background-color: #222222;
+}
+
+/* ---------------
+ * 003 - Slidebars
+ */
+
+.sb-slidebar {
+  background-color: #222222; /* Background colour. */
+  color: #e8e8e8; /* Text colour. */
+}
+
+.sb-slidebar a {
+  color: #FF3971;
+  text-decoration: none;
+}
+
+.sb-slidebar a:hover {
+  color: #379cd8; /* Link hover colour. */
+  text-decoration: underline;
+}
+
+/* Main Menu */
+.sb-menu { /* Apply to <ul> or <ol>. */
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.sb-menu li {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Will lighten any background colour you set. */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Will darken any background colour you set. */
+}
+
+.sb-menu > li:first-child {
+  border-top: none; /* Removes top border from first list item.. */
+}
+
+.sb-menu > li:last-child {
+  border-bottom: none; /* Removed bottom border from last list item. */
+}
+
+.sb-menu li a {
+  width: 100%; /* Makes links full width. */
+  display: inline-block;
+  padding: 1em; /* Creates an even padding the same size as your font. */
+  color: #f2f2f2;
+}
+
+.sb-menu li a:hover {
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.05); /* Will lighten any background colour you set. */
+}
+
+/* Borders */
+.sb-left .sb-menu li a {
+  border-left: 3px solid transparent;
+}
+
+.sb-left .sb-menu li a:hover {
+  border-left: 3px solid; /* Removes transparent colour, so border colour will be the same as link hover colour. */
+}
+
+.sb-right .sb-menu li a {
+  border-right: 3px solid transparent;
+}
+
+.sb-right .sb-menu li a:hover {
+  border-right: 3px solid; /* Removes transparent colour, so border colour will be the same as link hover colour. */
+}
+
+/* Left */
+
+
+.sb-menu li .sb-open-right, .sb-menu li small {
+  display: inline-block;
+  padding: 14px;
+}
+
+.sb-menu li img {
+  margin: 14px;
+}
+
+
+/* Slidebar Type */
+
+.sb-slidebar, .sb-slidebar h3 {
+  color: #F0F0F0;
+}
+
+.sb-slidebar ul.sb-nav li a {
+  color: #DEDEDE;
+}
+
+.sb-slidebar ul.sb-nav li a:hover {
+  color: #C7C7C7;
+  text-decoration: none;
+}
+
+.sb-slidebar ul.sb-nav li span:hover {
+  color: #C7C7C7;
+}

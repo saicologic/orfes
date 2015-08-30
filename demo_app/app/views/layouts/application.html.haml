@@ -1,0 +1,35 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %title Orphest
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    %nav.navbar.navbar-default.navbar-fixed-top.sb-slide{:role => "navigation"}
+      / Left Control
+      .sb-toggle-left
+        .navicon-line
+        .navicon-line
+        .navicon-line
+      .container
+        #logo.navbar-left
+          =link_to(image_tag('logo.png',{:class => "logo", width: "118"}),root_path)
+    = yield
+    .sb-slidebar.sb-left
+      %nav
+        %ul.sb-menu
+          %li
+            =image_tag('logo.png',{width: '118'})
+          %li.sb-close
+            =link_to('Home',root_path) 
+          %li.sb-close
+            =link_to('Heat Meater',streamings_estimote_path) 
+          %li.sb-close
+            =link_to('Control',streamings_control_path) 
+          %li.sb-close
+            =link_to('Using API',root_path)
+          %li.sb-close
+            =link_to('Contact',"http://hacklog.jp/works/3382")

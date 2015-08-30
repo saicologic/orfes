@@ -1,0 +1,36 @@
+#sb-site
+  #contents
+    #img
+    %canvas#canvas
+    .now_shaking_box
+      %img.now_shaking{src: '/assets/now_shaking.png'}
+:javascript
+  var sse = new EventSource("/streamings/stream");
+  sse.addEventListener("push",function(event) {
+    var color = event.data.match(/red|blue|yellow|green/);
+    var motion = event.data.match(/kick|step|jump/)
+    if (color != null) {
+      var bgColor;
+      if(color == 'red'){
+        bgColor = 'rgba(229,55,64,0.3';
+      }else if(color == 'blue'){
+        bgColor = 'rgba(63,162,216,0.3)';
+      }else if(color == 'green'){
+        bgColor = 'rgba(79,178,63,0.3)';
+      }else if(color == 'yellow'){
+        bgColor = 'rgba(242,231,,57,0.3)';
+      }
+      $('#img').css({'background-color' : bgColor});
+      $('#img').css({'height' : $(window).height() + 'px'});
+      scaling(color[0]);
+    }
+    if(motion != null){
+      if(motion == "kick"){
+        spark();
+      }else if(motion == 'step'){
+        hanabi();
+      }else if(motion == 'jump'){
+        bubble();
+      }
+    }
+  });
