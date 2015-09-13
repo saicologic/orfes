@@ -1,0 +1,8 @@
+#sb-site
+  #contents.control
+    =form_tag(streamings_message_path, method: 'post',remote: true) do
+      = label 'Color', 'Color', class: 'control-label'
+      = text_field_tag 'color','',{ class: 'form-control', placeholder: 'red,blue,yellow,green'}
+      = label 'Motion', 'Motion',class: 'control-label'
+      = text_field_tag 'motion', '',{ class: 'form-control', placeholder: 'step,jump,kick'}
+      = submit_tag "post",class: "btn btn-default"
